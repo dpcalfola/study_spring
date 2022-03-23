@@ -1,0 +1,158 @@
+
+
+1. 정적 페이지의 작동원리
+
+
+    웹 브라우저가 get 호출 - localhost:8080/hello-static.html
+        내장 톰캣 서버가 컨트롤러를 찾음
+            컨트롤러가 없다면
+                resources: static 아래에서 요청한 페이지 검색
+                - resources: static/hello-static.html 로드
+
+
+
+
+
+2.MVC, 템플릿 엔진 이미지
+
+
+    웹 브라우저가 get 호출 - localhost:8080/hello-mvc.html
+        내장 톰캣 서버가 컨트롤러를 찾음
+            컨트롤러가 있다!! - @GetMapping("hello-mvc") 와 hello-mvc.html (get 주소) 이 같다!!
+                return "hello-template"
+
+                    resource: templates 아래에서 요청한 페이지 검색
+                    - templates/hello-template.html 페이지 로드
+
+                파라미터 (@RequestParam(value = "name" ...
+                    8080/hello=mvc?name=fola!!!
+                    fola!!! <- 이 부분
+                    hello-template.html 의 ${name} 을 파라미터로 치환
+
+
+
+
+
+3. API 방식
+
+
+    1) 웹 브라우저가 get 호출 - localhost:8000/hello-string.html
+        내장 톰캣 서버가 컨트롤러를 찾음
+            컨트롤러가 있음 - @GetMapping("hello-string")
+            그러나 @ResponseBody 어노테이션 또한 있음
+            -> html 의 <body></body> 부분에 직접 넣어주겠다는 어노테이션
+                return "hello " + name
+
+                    (리턴 값의 형태가 문자열 -> StringConverter 작동)
+                    html 문서 없이 그대로 출력
+                        8080/hello-string?name=fola!!!!!
+
+1. 정적 페이지의 작동원리
+
+
+    웹 브라우저가 get 호출 - localhost:8080/hello-static.html
+        내장 톰캣 서버가 컨트롤러를 찾음
+            컨트롤러가 없다면
+                resources: static 아래에서 요청한 페이지 검색
+                - resources: static/hello-static.html 로드
+
+
+
+
+
+2.MVC, 템플릿 엔진 이미지
+
+
+    웹 브라우저가 get 호출 - localhost:8080/hello-mvc.html
+        내장 톰캣 서버가 컨트롤러를 찾음
+            컨트롤러가 있다!! - @GetMapping("hello-mvc") 와 hello-mvc.html (get 주소) 이 같다!!
+                return "hello-template"
+
+                    resource: templates 아래에서 요청한 페이지 검색
+                    - templates/hello-template.html 페이지 로드
+
+                파라미터 (@RequestParam(value = "name" ...
+                    8080/hello=mvc?name=fola!!!
+                    fola!!! <- 이 부분
+                    hello-template.html 의 ${name} 을 파라미터로 치환
+
+
+
+
+
+3. API 방식
+
+
+    1) 웹 브라우저가 get 호출 - localhost:8000/hello-string.html
+        내장 톰캣 서버가 컨트롤러를 찾음
+            컨트롤러가 있음 - @GetMapping("hello-string")
+            그러나 @ResponseBody 어노테이션 또한 있음
+            -> html 의 <body></body> 부분에 직접 넣어주겠다는 어노테이션
+                return "hello " + name
+
+                    (리턴 값의 형태가 문자열 -> StringConverter 작동)
+                    html 문서 없이 그대로 출력
+                        8080/hello-string?name=fola!!!!!
+                        결과:
+
+                        hello fola!!!!!
+
+                        View page Source 로 열어봐도 위의 한 문장만 존재
+
+
+            -> 이 방법은 주로 json 통신 방식에 이용됨
+
+
+
+    2) 웹 브라우저가 get 호출 - localhost:8000/hello-api.html
+        내장 톰캣 서버가 컨트롤러를 찾음
+            컨트롤러가 있음 - @GetMapping("hello-api")
+            그리고 @ResponseBody 어노테이션 또한 있음
+
+                내부 코드 동작
+
+                    return hello
+                    -> return 값이 문자열이 아닌 객체
+                    -> 객체의 형태를 보고 스프링이 대체로 맞춰준다.
+                    -> 웬만하면 json 형태를 사용 (-> JsonConverter 작동)
+
+                        8080/hello-api?name=fola!!!!!
+                        결과
+
+                        {"name":"fola!!!!!"}
+
+                        역시 View page Source 열어 보아도 위의 결과와 상동
+
+
+
+                        결과:
+
+                        hello fola!!!!!
+
+                        View page Source 로 열어봐도 위의 한 문장만 존재
+
+
+            -> 이 방법은 주로 json 통신 방식에 이용됨
+
+
+
+    2) 웹 브라우저가 get 호출 - localhost:8000/hello-api.html
+        내장 톰캣 서버가 컨트롤러를 찾음
+            컨트롤러가 있음 - @GetMapping("hello-api")
+            그리고 @ResponseBody 어노테이션 또한 있음
+
+                내부 코드 동작
+
+                    return hello
+                    -> return 값이 문자열이 아닌 객체
+                    -> 객체의 형태를 보고 스프링이 대체로 맞춰준다.
+                    -> 웬만하면 json 형태를 사용 (-> JsonConverter 작동)
+
+                        8080/hello-api?name=fola!!!!!
+                        결과
+
+                        {"name":"fola!!!!!"}
+
+                        역시 View page Source 열어 보아도 위의 결과와 상동
+
+

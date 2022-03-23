@@ -1,0 +1,7 @@
+
+HelloController.java >
+
+    //@RequestParam 의 옵션 required = false         -> 8080/hello-mvc -> 페이지가 로드됨
+    //                               true(default) -> 8080/hello-mvc -> 로드되지 않음 (Whitelabel Error Page)
+    //                                             -> 8080/hello-mvc?name=fola -> 페이지가 로드됨
+    //                                             -> 8080/hello-mvc?name      -> 페이지가 로드됨
